@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "myResourceGroup": {
+            "type": "string",
+            "defaultValue": "myChicken"
+        },
+        "cogmyResourceGroup": {
+            "type": "string",
+            "defaultValue": "defaultrg"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "centralus"
+        },
+        "spName": {
+            "type": "string",
+            "defaultValue": "HoofnHorns_sp"
+        },
+        "keykeyVaultName": {
+            "type": "string",
+            "defaultValue": "egg01"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "egg01"
+        },
+        "cogAccountName": {
+            "type": "string",
+            "defaultValue": "hoofnhorns-agent"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "bootstrapScript",
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell",
+            "properties": {
+                "azPowerShellVersion": "10.0",
+                "scriptContent": "[concat('Invoke-WebRequest -Uri \"https://egg01.blob.core.windows.net/scripts/1.0.0.3/bootstrap.ps1?sp=r&st=2025-09-02T14:23:25Z&se=2099-09-02T22:38:25Z&spr=https&sv=2024-11-04&sr=b&sig=%2BMmViNQ7jOGRDOcErCsmZRpTiYC0dbEYGUuYecF9TmQ%3D\" -OutFile \"bootstrap.ps1\"; .\\bootstrap.ps1 ', '-myResourceGroup ', parameters('myResourceGroup'), ' -cogmyResourceGroup ', parameters('cogmyResourceGroup'), ' -location ', resourceGroup().location, ' -spName ', parameters('spName'), ' -keykeyVaultName ', parameters('keykeyVaultName'), ' -storageAccountName ', parameters('storageAccountName'), ' -cogAccountName ', parameters('cogAccountName'), ' -subscriptionId ', subscription().subscriptionId, ' -tenantId ', tenant().tenantId)]",
+                "arguments": "",
+                "timeout": "PT30M",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D"
+            }
+        }
+    ],
+    "outputs": {}
+}
