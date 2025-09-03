@@ -16,8 +16,11 @@
         {
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2020-10-01",
-            "name": "bootstrapScript",
+            "name": "bootstrap.ps1",
             "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "kind": "AzurePowerShell",
             "properties": {
                 "azPowerShellVersion": "10.0",
